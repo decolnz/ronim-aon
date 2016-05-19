@@ -1,0 +1,70 @@
+
+Cisco ME3600
+-------------
+archive download-sw /imageonly ftp://admin:password@ftp/cisco/switches/me3600x/me360x-universalk9-tar.155-3.S2.tar
+reload
+
+Cisco ASR920
+-------------
+copy ftp://admin:password@ftp:/cisco/routers/asr920/asr920-universalk9_npe.03.16.02a.S.155-3.S2a-ext.bin bootflash:
+
+config t
+no boot system flash bootflash:asr920-universalk9_npe.03.16.01a.S.155-3.S1a-ext.bin
+boot system flash bootflash:asr920-universalk9_npe.03.16.02a.S.155-3.S2a-ext.bin
+do wr
+
+Cisco ASR1002
+--------------
+copy ftp://admin:password@ftp:/cisco/routers/asr1000/asr1002-x/asr1002x-universalk9.03.16.02.S.155-3.S2-ext.SPA.bin  bootflash:
+
+config t
+no boot system flash bootflash:asr1002x-universalk9.03.10.04.S.153-3.S4-ext.SPA.bin
+no boot system flash bootflash:asr1000rp2-adventerprisek9.03.10.04.S.153-3.S4-ext.bin
+boot system flash bootflash:asr1002x-universalk9.03.16.02.S.155-3.S2-ext.SPA.bin
+do wr
+
+Cisco ASR1006 
+-------------
+PR0 
+copy ftp://admin:password@ftp:/cisco/routers/asr1000/asr1006/asr1000rp2-adventerprisek9.03.16.02.S.155-3.S2-ext.bin  bootflash:
+PR1
+copy bootflash:asr1000rp2-adventerprisek9.03.16.02.S.155-3.S2-ext.bin stby-bootflash:
+delete stby-bootflash:asr1000rp2-adventerprisek9.03.10.04.S.153-3.S4-ext.bin
+
+config t
+no boot system flash bootflash:asr1000rp2-adventerprisek9.03.10.04.S.153-3.S4-ext.bin
+boot system flash bootflash:asr1000rp2-adventerprisek9.03.16.02.S.155-3.S2-ext.bin
+end
+write
+                      
+Cisco C3650
+-------------
+upload cat3k_caa-universalk9.SPA.03.06.04.E.152-2.E4.bin
+copy ftp://admin:password@ftp:/cisco/switches/3650/cat3k_caa-universalk9.SPA.03.06.04.E.152-2.E4.bin flash:
+
+delete flash:cat3k_caa-universalk9.SPA.03.03.03.SE.150-1.EZ3.bin
+software install file flash:cat3k_caa-universalk9.SPA.03.06.04.E.152-2.E4.bin
+sh version | i 03.06.04.E
+
+Juniper MX80 and MX480
+-------------------------
+$pwd
+/home/admin/juniper/routers/
+
+scp jinstall64-14.2R6.5-domestic-signed.tgz decolnz@er-02-dar.tz:/var/tmp/
+file copy /var/tmp/jinstall64-14.2R6.5-domestic-signed.tgz re1:/var/tmp/
+
+run request system software add /var/tmp/jinstall64-14.2R4.9-domestic-signed.tgz validate
+delete
+set system root root-authentication plain-text-password
+commit
+run request system reboot
+
+set chassis network-services enhanced-ip
+commit synchronize
+reboot
+
+load override /var/tmp/config-may-2016
+
+----------------------------------------
+
