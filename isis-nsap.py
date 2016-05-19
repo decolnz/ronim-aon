@@ -1,3 +1,6 @@
+#This isis python script is used to create nsap addresses.
+#Ronim Aon
+
 #!/usr/bin/env python3
 
 import sys
